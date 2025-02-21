@@ -1,18 +1,16 @@
-// main.js
+// init.js
 
 import { setupListeners } from "./Utils/SetupListeners.js";
 import { CanvasResizer } from "./Utils/Helpers.js";
-import Game from "./Game.js";
+import { update, render} from "./Game.js";
 
 let canvas;
 let ctx;
-let game;
 
 function setup() {
   canvas = document.getElementById("can1");
   ctx = canvas.getContext("2d");
 
-  game = new Game([canvas, ctx]);
   setupListeners([canvas, ctx]);
 
   CanvasResizer.fitToWindow(canvas);
@@ -31,9 +29,8 @@ function main() {
     deltaTime = (timestamp - lastTime) / 1000;
     lastTime = timestamp;
 
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    game.update(deltaTime);
-    game.render(ctx);
+    update(deltaTime);
+    render();
     window.requestAnimationFrame(loop);
   }
   window.requestAnimationFrame(loop);
