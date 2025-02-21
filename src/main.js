@@ -21,7 +21,7 @@ function main() {
   let colorB = 200;
   
   function loop(timestamp) {
-    deltaTime = timestamp - lastTime;
+    deltaTime = (timestamp - lastTime) / 1000;
     lastTime = timestamp;
 
     update(deltaTime);
@@ -33,9 +33,9 @@ function main() {
   function update(dt) {
     // Update game state
     console.log("Update");
-    colorR = (colorR + 1) % 256;
-    colorG = (colorG + 1) % 256;
-    colorB = (colorB + 1) % 256;
+    // colorR = (colorR + 1) % 256;
+    // colorG = (colorG + 1) % 256;
+    // colorB = (colorB + 1) % 256;
   }
 
   function render() {
