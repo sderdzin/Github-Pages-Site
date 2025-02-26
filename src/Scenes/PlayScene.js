@@ -2,17 +2,21 @@
 
 import BaseScene from "./BaseScene.js";
 import Button from "../Layout/Button.js";
+import Player from "../Objects/Player.js";
 
 export default class PlayScene extends BaseScene {
     constructor(that) {
         super();
         this.game = that;
         this.objects = [];
-        this.create();
+        this.player = null;
+        // this.create();
         // console.log(this);
     }
 
     create() {
+        this.player = new Player(this.game, 100, 100, 50, 50);
+        this.objects.push(this.player);
         // let x = window.innerWidth / 2;
         // let y = (window.innerHeight / 8) * 3;
         // this.objects.push(new Button(this.game, x - 100, y, 300, 80).setText("PLAY"));
@@ -20,6 +24,7 @@ export default class PlayScene extends BaseScene {
 
     setActive() {
         super.setActive();
+        this.create();
         console.log(this.game);
         let hud = this.game.scenes.find(scene => scene.constructor.name === "HUD");
         hud.setText("Play Scene");
@@ -27,6 +32,8 @@ export default class PlayScene extends BaseScene {
     }
 
     update(dt) {
+        // console.log("Updating");
+
         this.objects.forEach(obj => {
             obj.update(dt);
         });

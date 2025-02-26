@@ -7,13 +7,16 @@ export default class BaseScene {
         return this;
     }
 
-    create() {}
+    create() {
+        this.active = true;
+    }
 
     update(dt) {}
 
     render(ctx) {}
 
     setActive() {
+        // this.create();
         this.active = true;
         return this;
     }

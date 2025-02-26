@@ -1,13 +1,13 @@
 export const setupListeners = (that) => {
   let [canvas, ctx] = that;
   // console.log(canvas, ctx);
-  document.addEventListener("keydown", function (event) {
-    console.log("Key Pressed...", event.key);
-  });
+  // document.addEventListener("keydown", function (event) {
+  //   console.log("Key Pressed...", event.key);
+  // });
 
-  document.addEventListener("keyup", function (event) {
-    console.log("Key Released...", event.key);
-  });
+  // document.addEventListener("keyup", function (event) {
+  //   console.log("Key Released...", event.key);
+  // });
 
   window.addEventListener("resize", (event) => {
     console.log("Resized...", event);

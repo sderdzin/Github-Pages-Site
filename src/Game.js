@@ -9,6 +9,7 @@ export default class Game {
     [this.canvas, this.ctx] = [...props];
     this.scenes = [];
     this.activeScenes;
+    this.gravity = 0.5;
     this.create();
   }
 
@@ -23,6 +24,7 @@ export default class Game {
 
   update(dt) {
     this.findActiveScenes();
+    this.activeScenes.forEach(scene => scene.update(dt));
   }
 
   render(ctx) {
