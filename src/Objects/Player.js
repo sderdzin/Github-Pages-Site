@@ -34,7 +34,7 @@ export default class Player extends BaseControllerObject {
   update(dt) {
     // console.log("Player Update");
     this.objects.forEach((obj) => {
-        obj.update(dt);
+      if (obj.active) obj.update(dt);
       });
 
     this.handleInput();
@@ -52,7 +52,7 @@ export default class Player extends BaseControllerObject {
 
   render(ctx) {
     this.objects.forEach((obj) => {
-      obj.render(ctx);
+      if (obj.active) obj.render(ctx);
     });
 
     ctx.fillStyle = "orange";
@@ -61,10 +61,10 @@ export default class Player extends BaseControllerObject {
 
   handleInput() {
     if (this.keys.includes("ArrowUp") || this.keys.includes("w")) {
-      this.vy = -5;
+      // this.vy = -5;
     }
     if (this.keys.includes("ArrowDown") || this.keys.includes("s")) {
-      this.vy = 5;
+      // this.vy = 5;
     }
     if (this.keys.includes("ArrowLeft") || this.keys.includes("a")) {
       this.vx = -5;
@@ -126,7 +126,7 @@ export default class Player extends BaseControllerObject {
 
   preloadBullets(count) {
     for (let i = 0; i < count; i++) {
-      this.objects.push(new Bullet(this, this.x, this.y, 10, 10));
+      this.objects.push(new Bullet(this, this.x, this.y, 6, 10));
     }
   }
 }
