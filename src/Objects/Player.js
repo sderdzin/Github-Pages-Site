@@ -18,7 +18,18 @@ export default class Player extends BaseControllerObject {
     this.bulletTimer = 0;
     this.bulletInterval = 0.1;
     this.fireAvailable = true;
+    this.mouse = { x: 0, y: 0 }; // Add mouse position
     // this.create();
+
+    this.turret = {
+      x: 0,
+      y: 0,
+      width: 10,
+      height: this.height / 2 + 10,
+    };
+
+    this.updateTurretPosition();
+
     console.log(this);
   }
 
@@ -48,6 +59,7 @@ export default class Player extends BaseControllerObject {
       this.fireAvailable = true;
     }
     // console.log(this);
+    this.updateTurretPosition();
   }
 
   render(ctx) {
@@ -57,6 +69,31 @@ export default class Player extends BaseControllerObject {
 
     ctx.fillStyle = "orange";
     ctx.fillRect(this.x, this.y, this.width, this.height);
+
+    this.renderTurret(ctx);
+  }
+
+  renderTurret(ctx) {
+    const angle = Math.atan2(this.mouse.y - (this.y + this.height / 2), this.mouse.x - (this.x + this.width / 2));
+    ctx.save();
+    ctx.translate(this.x + this.width / 2, this.y + this.height / 2);
+    ctx.rotate(angle);
+    ctx.fillStyle = "black";
+    ctx.fillRect(-this.turret.width / 2, -this.turret.height, this.turret.width, this.turret.height);
+    ctx.restore();
+    
+    // const angle = Math.atan2(this.mouse.y - this.y, this.mouse.x - this.x);
+    // ctx.save();
+    // ctx.translate(this.x + this.width / 2, this.y + this.height / 2);
+    // ctx.rotate(angle);
+    // ctx.fillStyle = "black";
+    // ctx.fillRect(-this.turret.width / 2, -this.turret.height / 2, this.turret.width, this.turret.height);
+    // ctx.restore();
+  }
+
+  updateTurretPosition() {
+    this.turret.x = this.x + this.width / 2 - 5;
+    this.turret.y = this.y - 10;
   }
 
   handleInput() {
