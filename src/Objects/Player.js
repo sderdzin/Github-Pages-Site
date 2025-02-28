@@ -74,18 +74,24 @@ export default class Player extends BaseControllerObject {
   }
 
   renderTurret(ctx) {
+    
+
     const angle = Math.atan2(this.mouse.y - (this.y + this.height / 2), this.mouse.x - (this.x + this.width / 2));
     ctx.save();
     ctx.translate(this.x + this.width / 2, this.y + this.height / 2);
     ctx.rotate(angle);
+
+    // ctx.strokeStyle = "red";
+    // ctx.strokeRect(this.turret.x, this.turret.y, this.turret.width, this.turret.height);
+
     ctx.fillStyle = "black";
     ctx.fillRect(-this.turret.width / 2, -this.turret.height, this.turret.width, this.turret.height);
     ctx.restore();
     
-    // const angle = Math.atan2(this.mouse.y - this.y, this.mouse.x - this.x);
+    // const angle1 = Math.atan2(this.mouse.y - this.y, this.mouse.x - this.x);
     // ctx.save();
     // ctx.translate(this.x + this.width / 2, this.y + this.height / 2);
-    // ctx.rotate(angle);
+    // ctx.rotate(angle1);
     // ctx.fillStyle = "black";
     // ctx.fillRect(-this.turret.width / 2, -this.turret.height / 2, this.turret.width, this.turret.height);
     // ctx.restore();
