@@ -4,6 +4,7 @@ export const Controller = (that) => {
   console.log(parent);
 
   document.addEventListener("keydown", function (event) {
+    console.log("Key down...");
     if (!parent.keys.includes(event.key)) {
       parent.keys.push(event.key);
     }
@@ -37,4 +38,5 @@ export const Controller = (that) => {
   document.addEventListener("mouseup", function (event) {
     parent.mouse.down = false;
   });
+
 };

@@ -1,14 +1,14 @@
-// Player.js
+// Enemy1.js
 
-import BaseControllerObject from "./BaseControllerObject.js";
-import Bullet from "./Bullet.js";
-import { Controller } from "../Utils/Controller.js";
+import Bullet from "../Bullet.js";
+import BaseEntityObject from "../BaseEntityObject.js";
 
-export default class Player extends BaseControllerObject {
+export default class Enemy1 extends BaseEntityObject {
   constructor(that, x, y, w, h) {
     super(that, x, y, w, h);
     // Additional initialization if needed
     this.gravity = this.game.gravity;
+    this.gravity = 0.1;
     this.vy = 0;
     this.speed = 5;
     this.keys = [];
@@ -18,6 +18,7 @@ export default class Player extends BaseControllerObject {
     this.fireAvailable = true;
     this.mouse = { x: 0, y: 0 }; // Add mouse position
     // this.create();
+    this.r = 40;
 
     this.turret = {
       x: 0,
@@ -35,38 +36,30 @@ export default class Player extends BaseControllerObject {
     console.log(this);
   }
 
-  // Add methods and properties specific to ControllerObject
+  // Add methods and properties specific to EntityObject
   create() {
-    // let controller = Controller(this);
-    Controller(this);
-    // let num = this.keys.length;
-    // console.log(num);
-    // console.log(this.keys);
   }
 
   update(dt) {
-    if (this.mouse.down) {
-      console.log("Mouse down...");
-      this.fire();
-    }
-    
-    // console.log("Player Update");
+    // console.log("Enemy1 Update");
     this.objects.forEach((obj) => {
       if (obj.active) obj.update(dt);
     });
 
-    this.handleInput();
     this.applyForces();
     this.move();
     this.applyFriction();
     this.checkBounds();
-    this.bulletTimer += dt;
-    if (this.bulletTimer >= this.bulletInterval) {
-      this.bulletTimer = 0;
-      this.fireAvailable = true;
-    }
+    
+    
+    // this.bulletTimer += dt;
+    // if (this.bulletTimer >= this.bulletInterval) {
+    //   this.bulletTimer = 0;
+    //   this.fireAvailable = true;
+    // }
     // console.log(this);
-    this.updateTurretPosition();
+
+    // this.updateTurretPosition();
   }
 
   render(ctx) {
@@ -74,14 +67,18 @@ export default class Player extends BaseControllerObject {
       if (obj.active) obj.render(ctx);
     });
 
-    ctx.fillStyle = "orange";
-    ctx.fillRect(this.x, this.y, this.width, this.height);
+    // ctx.fillStyle = "blue";
+    // ctx.fillRect(this.x, this.y, this.width, this.height);
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.r, 0, 2 * Math.PI);
+    ctx.fillStyle = "blue";
+    ctx.fill();
 
-    this.renderTurret(ctx);
+    // this.renderTurret(ctx);
   }
 
   renderTurret(ctx) {
-    // Calculate the angle between the player and the mouse and rotate the turret to face the mouse.
+    // Calculate the angle between the Enemy1 and the mouse and rotate the turret to face the mouse.
     // const angle =
     //   Math.atan2(
     //     this.mouse.y - (this.y + this.height / 2),
@@ -119,24 +116,6 @@ export default class Player extends BaseControllerObject {
   updateTurretPosition() {
     this.turret.x = this.x + this.width / 2 - 5;
     this.turret.y = this.y - 10;
-  }
-
-  handleInput() {
-    if (this.keys.includes("ArrowUp") || this.keys.includes("w")) {
-      // this.vy = -5;
-    }
-    if (this.keys.includes("ArrowDown") || this.keys.includes("s")) {
-      // this.vy = 5;
-    }
-    if (this.keys.includes("ArrowLeft") || this.keys.includes("a")) {
-      this.vx = -5;
-    }
-    if (this.keys.includes("ArrowRight") || this.keys.includes("d")) {
-      this.vx = 5;
-    }
-    if (this.keys.includes(" ") && this.fireAvailable) {
-      this.fire();
-    }
   }
 
   applyForces() {
@@ -202,16 +181,16 @@ export default class Player extends BaseControllerObject {
   }
 
   checkBounds() {
-    if (this.y + this.height > this.game.canvas.height) {
-      this.y = this.game.canvas.height - this.height;
+    if (this.y + this.r > this.game.canvas.height) {
+      this.y = this.game.canvas.height - this.r;
       this.vy *= this.bounce;
     }
     if (this.y < 0) {
       this.y = 0;
       this.vy *= this.bounce;
     }
-    if (this.x + this.width > this.game.canvas.width) {
-      this.x = this.game.canvas.width - this.width;
+    if (this.x + this.r > this.game.canvas.width) {
+      this.x = this.game.canvas.width - this.r;
       this.vx *= this.bounce;
     }
     if (this.x < 0) {
