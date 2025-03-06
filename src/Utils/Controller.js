@@ -4,7 +4,7 @@ export const Controller = (that) => {
   console.log(parent);
 
   document.addEventListener("keydown", function (event) {
-    console.log("Key down...");
+    // console.log("Key down...");
     if (!parent.keys.includes(event.key)) {
       parent.keys.push(event.key);
     }

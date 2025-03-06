@@ -33,6 +33,8 @@ export default class Enemy1 extends BaseEntityObject {
     this.maxObjects = 50; // Set the maximum length for the objects array
     this.preloadBullets(this.maxObjects); // Preload 100 bullets
 
+    this.active = true;
+
     console.log(this);
   }
 
@@ -69,6 +71,7 @@ export default class Enemy1 extends BaseEntityObject {
 
     // ctx.fillStyle = "blue";
     // ctx.fillRect(this.x, this.y, this.width, this.height);
+    // console.log("New R Value:", this.r);
     ctx.beginPath();
     ctx.arc(this.x, this.y, this.r, 0, 2 * Math.PI);
     ctx.fillStyle = "blue";
@@ -205,5 +208,10 @@ export default class Enemy1 extends BaseEntityObject {
       bullet.turretRef = this.turret;
       this.objects.push(bullet);
     }
+  }
+
+  setRadius(r) {
+    this.r = r;
+    return this;
   }
 }

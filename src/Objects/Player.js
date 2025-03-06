@@ -46,7 +46,7 @@ export default class Player extends BaseControllerObject {
 
   update(dt) {
     if (this.mouse.down) {
-      console.log("Mouse down...");
+      // console.log("Mouse down...");
       this.fire();
     }
     
@@ -155,7 +155,7 @@ export default class Player extends BaseControllerObject {
   }
 
   fire() {
-    console.log("Fire!");
+    // console.log("Fire!");
     if (!this.fireAvailable) return;
     this.fireAvailable = false;
 
