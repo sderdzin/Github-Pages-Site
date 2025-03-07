@@ -4,11 +4,11 @@ import Bullet from "../Bullet.js";
 import BaseEntityObject from "../BaseEntityObject.js";
 
 export default class Enemy1 extends BaseEntityObject {
-  constructor(that, x, y, w, h) {
+  constructor(that, x, y, w, h, mass = 1) {
     super(that, x, y, w, h);
     // Additional initialization if needed
     this.gravity = this.game.gravity;
-    this.gravity = 0.1;
+    // this.gravity = 0.1;
     this.vy = 0;
     this.speed = 5;
     this.keys = [];
@@ -17,8 +17,10 @@ export default class Enemy1 extends BaseEntityObject {
     this.bulletInterval = 0.1;
     this.fireAvailable = true;
     this.mouse = { x: 0, y: 0 }; // Add mouse position
-    // this.create();
     this.r = 40;
+    this.mass = mass;
+    this.bounce = -0.7;
+    this.friction = 0.99;
 
     this.turret = {
       x: 0,
@@ -35,7 +37,7 @@ export default class Enemy1 extends BaseEntityObject {
 
     this.active = true;
 
-    console.log(this);
+    // console.log(this);
   }
 
   // Add methods and properties specific to EntityObject
@@ -212,6 +214,13 @@ export default class Enemy1 extends BaseEntityObject {
 
   setRadius(r) {
     this.r = r;
+    this.mass = r * r;
+    return this;
+  }
+
+  setXYVelocity(vx, vy) {
+    this.vx = vx;
+    this.vy = vy;
     return this;
   }
 }

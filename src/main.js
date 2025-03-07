@@ -12,10 +12,11 @@ function setup() {
   canvas = document.getElementById("can1");
   ctx = canvas.getContext("2d");
 
-  game = new Game([canvas, ctx]);
   setupListeners([canvas, ctx]);
-
   CanvasResizer.fitToWindow(canvas);
+  
+  game = new Game([canvas, ctx]);
+  
   main();
 }
 

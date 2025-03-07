@@ -5,7 +5,7 @@ import Bullet from "./Bullet.js";
 import { Controller } from "../Utils/Controller.js";
 
 export default class Player extends BaseControllerObject {
-  constructor(that, x, y, w, h) {
+  constructor(that, x, y, w, h, mass = 1) {
     super(that, x, y, w, h);
     // Additional initialization if needed
     this.gravity = this.game.gravity;
@@ -17,7 +17,9 @@ export default class Player extends BaseControllerObject {
     this.bulletInterval = 0.1;
     this.fireAvailable = true;
     this.mouse = { x: 0, y: 0 }; // Add mouse position
-    // this.create();
+    this.mass = mass * this.width * this.height;
+    this.bounce = -0.7;
+    this.friction = 0.89;
 
     this.turret = {
       x: 0,
@@ -61,7 +63,7 @@ export default class Player extends BaseControllerObject {
     this.applyFriction();
     this.checkBounds();
     this.bulletTimer += dt;
-    if (this.bulletTimer >= this.bulletInterval) {
+    if ((this.bulletTimer >= this.bulletInterval) && !this.fireAvailable) {
       this.bulletTimer = 0;
       this.fireAvailable = true;
     }
@@ -102,12 +104,7 @@ export default class Player extends BaseControllerObject {
     ctx.rotate(this.turret.rotation);
 
     ctx.fillStyle = "black";
-    ctx.fillRect(
-      -this.turret.width / 2,
-      -this.turret.height,
-      this.turret.width,
-      this.turret.height
-    );
+    ctx.fillRect(-this.turret.width / 2, -this.turret.height, this.turret.width, this.turret.height);
 
     // Testing only
     // ctx.fillStyle = "red";
@@ -175,20 +172,16 @@ export default class Player extends BaseControllerObject {
 
     let bullet = this.objects.find((obj) => obj.active === false);
     if (bullet) {
-      bullet.x = this.x + this.width / 2 - bullet.width / 2;
-      bullet.y = this.y + this.height / 2;
-      // bullet.y = this.y;
+      // Calculate the offset from the center of the player to the end of the turret
+      const turretLength = this.turret.height;
+      const offsetX = turretLength * Math.cos(angle);
+      const offsetY = turretLength * Math.sin(angle);
 
-      // bullet.x = this.turret.x + this.turret.width / 2 - bullet.width / 2;
-      bullet.x = this.turret.x + bullet.width;
-      // bullet.y = this.turret.y + this.height / 2;
-      bullet.y = this.turret.y;
-
+      // Set the bullet's initial position to the end of the turret
+      bullet.x = this.x + this.width / 2 + offsetX;
+      bullet.y = this.y + this.height / 2 + offsetY;
       
       bullet.rotation = this.turret.rotation;
-      // bullet.rotation = angle;
-      // bullet.rotation = 250;
-      // console.log("Bullet rotation...", this.turret.rotation, angle);
       
        // Normalize the velocity vector
        const vx = Math.cos(angle);

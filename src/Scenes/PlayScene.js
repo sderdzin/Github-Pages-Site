@@ -6,6 +6,7 @@ import Player from "../Objects/Player.js";
 import Enemy1 from "../Objects/Enemies/Enemy1.js";
 import { CollisionDetection } from "../Utils/CollisionDetection.js";
 import * as Krazy from "../Utils/CollisionDetection.js";
+import PlayHUD from "../HUD/PlayHUD.js";
 
 export default class PlayScene extends BaseScene {
     constructor(that) {
@@ -16,6 +17,8 @@ export default class PlayScene extends BaseScene {
         this.enemies = [];
         this.player = null;
         this.activeEnemies = null;
+        this.score = 0;
+
         // this.create();
 
         this.colDet = Krazy.CollisionDetection.rectCircleIntersect;
@@ -25,16 +28,11 @@ export default class PlayScene extends BaseScene {
     create() {
         this.player = new Player(this.game, 100, 100, 50, 50);
         this.objects.push(this.player);
+
+        this.hud = new PlayHUD(this.game, this.score);
+        // this.objects.push(this.hud);
         
         this.initEnemies();
-
-        // this.enemy = new Enemy1(this.game, 200, 200, 50, 50);
-        // this.enemies.push(this.enemy);
-        
-        // this.objects.push(this.enemy);
-        // let x = window.innerWidth / 2;
-        // let y = (window.innerHeight / 8) * 3;
-        // this.objects.push(new Button(this.game, x - 100, y, 300, 80).setText("PLAY"));
     }
 
     setActive() {
@@ -49,7 +47,11 @@ export default class PlayScene extends BaseScene {
     update(dt) {
         // console.log("Updating");
 
-        this.activeEnemies = this.enemies.filter(enemy => enemy.active);
+        // let objPosZIndex = this.objects.map(obj => obj.zIndex);
+        // let sortedObjects = this.objects.sort((a, b) => a.zIndex - b.zIndex);
+        // console.log("Sorted Objects: ", sortedObjects);
+
+        this.activeEnemies = this.enemies.filter(enemy => enemy.active && enemy.collisionEnabled);
         
         this.activeEnemies.forEach(enemy => {
             enemy.update(dt);
@@ -67,7 +69,7 @@ export default class PlayScene extends BaseScene {
                     if (this.colDet(bullet, enemy)) {
                         // bullet.active = false;
                         this.handleCollision(bullet, enemy);
-                        console.log("Number of enemies: ", this.activeEnemies.length, this.activeEnemies);
+                        // console.log("Number of enemies: ", this.activeEnemies.length, this.activeEnemies);
                         // bullet.setInactive();
                         // this.enemy.active = false;
                         // console.log("Collision detected");
@@ -75,19 +77,23 @@ export default class PlayScene extends BaseScene {
                 });
             });
         };
+
+        this.hud.update(dt);
     }
 
     render(ctx) {
         // console.log("Rendering");
         this.setBackground(ctx);
-        
-        this.objects.forEach(obj => {
-            obj.render(ctx);
-        });
 
         this.activeEnemies.forEach(enemy => {
             enemy.render(ctx);
         });
+
+        this.objects.forEach(obj => {
+            obj.render(ctx);
+        });
+
+        this.hud.render(ctx);
     }
 
     setBackground(ctx) {
@@ -98,7 +104,7 @@ export default class PlayScene extends BaseScene {
     initEnemies() {
         for (let i = 0; i < this.maxEnemies; i++) {
             let x = Math.random() * this.game.canvas.width;
-            let y = Math.random() * this.game.canvas.height;
+            let y = -10;
             let enemy = new Enemy1(this.game, x, y, 50, 50).setRadius(50);
             this.enemies.push(enemy);
             // this.objects.push(enemy);
@@ -106,24 +112,32 @@ export default class PlayScene extends BaseScene {
     }
 
     handleCollision(bullet, enemy) {
-        console.log("Enemy Size: ", enemy.r*2);
+        // console.log("Enemy Size: ", enemy.r*2);
+        this.score += 10;
+        this.hud.score = this.score;
         const enemySize = enemy.r;
 
         bullet.setInactive();
         enemy.setInactive();
 
-        console.log(enemySize);
+        // console.log(enemySize);
 
         if (enemySize > 10) {
             let newR = enemySize / 2;
 
-            console.log("New Radius: ", newR);
+            // console.log("New Radius: ", newR);
 
             let x = enemy.x;
-            let y = 10;
+            let y = enemy.y;
+            let vx1 = Math.random() * 50 - 25;
+            let vy1 = Math.random() * 20 - 20;
+            let vx2 = Math.random() * 50 - 25;
+            let vy2 = Math.random() * 20 - 20;
 
-            let enemy1 = new Enemy1(this.game, x, y).setRadius(newR);
-            this.enemies.push(enemy1);
+            let enemy1 = new Enemy1(this.game, x, y).setRadius(newR).setXYVelocity(vx1, vy1);
+            let enemy2 = new Enemy1(this.game, x, y).setRadius(newR).setXYVelocity(vx2, vy2);
+            
+            this.enemies.push(enemy1, enemy2);
 
             // let x1 = enemy.x;
             // let y1 = enemy.y;

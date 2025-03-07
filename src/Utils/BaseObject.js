@@ -3,6 +3,7 @@
 export default class BaseObject {
     constructor() {
         this.active = false;
+        this.collisionEnabled = true;
     }
 
     setActive() {

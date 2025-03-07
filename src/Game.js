@@ -7,6 +7,8 @@ import StartScene from "./Scenes/StartScene.js";
 export default class Game {
   constructor(props) {
     [this.canvas, this.ctx] = [...props];
+    this.width = this.canvas.width;
+    this.height = this.canvas.height;
     this.scenes = [];
     this.activeScenes;
     this.gravity = 0.5;
