@@ -7,6 +7,7 @@ import Enemy1 from "../Objects/Enemies/Enemy1.js";
 import { CollisionDetection } from "../Utils/CollisionDetection.js";
 import * as Krazy from "../Utils/CollisionDetection.js";
 import PlayHUD from "../HUD/PlayHUD.js";
+import Platform from "../Objects/Obstacles/Platform.js";
 
 export default class PlayScene extends BaseScene {
     constructor(that) {
@@ -29,6 +30,9 @@ export default class PlayScene extends BaseScene {
     create() {
         this.player = new Player(this.game, 100, this.game.height - 75, 50, 50);
         this.objects.push(this.player);
+
+        let floor = new Platform(this.game, 0, this.game.height - 50, this.game.width, 50);
+        this.objects.push(floor);
 
         this.hud = new PlayHUD(this.game, this.score);
         // this.objects.push(this.hud);
@@ -102,7 +106,7 @@ export default class PlayScene extends BaseScene {
     }
 
     setBackground(ctx) {
-        ctx.fillStyle = `rgb(112, 128, 144)`;
+        ctx.fillStyle = `rgb(46, 53, 59)`;
         ctx.fillRect(0, 0, this.game.canvas.width, this.game.canvas.height);
     }
 
