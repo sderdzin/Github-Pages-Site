@@ -124,7 +124,7 @@ export default class Enemy1 extends BaseEntityObject {
   }
 
   applyForces() {
-    this.vx += this.ax;
+    this.vx += this.ax / this.mass;
     this.vy += this.gravity;
   }
 

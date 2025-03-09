@@ -5,12 +5,15 @@ export const Controller = (that) => {
 
   document.addEventListener("keydown", function (event) {
     // console.log("Key down...");
+    event.preventDefault();
+
     if (!parent.keys.includes(event.key)) {
       parent.keys.push(event.key);
     }
   });
 
   document.addEventListener("keyup", function (event) {
+    event.preventDefault();
     const index = parent.keys.indexOf(event.key);
     if (index > -1) {
       parent.keys.splice(index, 1);
@@ -32,10 +35,12 @@ export const Controller = (that) => {
   );
   
   document.addEventListener("mousedown", function (event) {
+    event.preventDefault();
     parent.mouse.down = true;
   });
   
   document.addEventListener("mouseup", function (event) {
+    event.preventDefault();
     parent.mouse.down = false;
   });
 

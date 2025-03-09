@@ -18,6 +18,7 @@ export default class PlayScene extends BaseScene {
         this.player = null;
         this.activeEnemies = null;
         this.score = 0;
+        this.autoFireEnabled = true;
 
         // this.create();
 
@@ -26,7 +27,7 @@ export default class PlayScene extends BaseScene {
     }
 
     create() {
-        this.player = new Player(this.game, 100, 100, 50, 50);
+        this.player = new Player(this.game, 100, this.game.height - 75, 50, 50);
         this.objects.push(this.player);
 
         this.hud = new PlayHUD(this.game, this.score);
@@ -50,6 +51,10 @@ export default class PlayScene extends BaseScene {
         // let objPosZIndex = this.objects.map(obj => obj.zIndex);
         // let sortedObjects = this.objects.sort((a, b) => a.zIndex - b.zIndex);
         // console.log("Sorted Objects: ", sortedObjects);
+
+        if (this.autoFireEnabled) {
+            this.player.fire();
+        }
 
         this.activeEnemies = this.enemies.filter(enemy => enemy.active && enemy.collisionEnabled);
         
@@ -138,25 +143,6 @@ export default class PlayScene extends BaseScene {
             let enemy2 = new Enemy1(this.game, x, y).setRadius(newR).setXYVelocity(vx2, vy2);
             
             this.enemies.push(enemy1, enemy2);
-
-            // let x1 = enemy.x;
-            // let y1 = enemy.y;
-            // let x2 = enemy.x + enemySize;
-            // let y2 = enemy.y + enemySize;
-            // let x3 = enemy.x + newR;
-            // let y3 = enemy.y + newR;
-
-            // let enemy1 = new Enemy1(this.game, x1, y1);
-            // let enemy2 = new Enemy1(this.game, x2, y1);
-            // let enemy3 = new Enemy1(this.game, x1, y2);
-            // let enemy4 = new Enemy1(this.game, x2, y2);
-
-            // enemy1.r = newR;
-            // enemy2.r = newR;
-            // enemy3.r = newR;
-            // enemy4.r = newR;
-
-            // this.enemies.push(enemy1, enemy2, enemy3, enemy4);
         }
         
         // bullet.active = false;
