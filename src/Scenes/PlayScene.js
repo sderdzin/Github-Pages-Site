@@ -61,14 +61,24 @@ export default class PlayScene extends BaseScene {
         }
 
         this.activeEnemies = this.enemies.filter(enemy => enemy.active && enemy.collisionEnabled);
+        let collidableObjects = this.objects.filter(obj => obj.collisionEnabled);
+        let staticObjects = this.objects.filter(obj => !obj.collisionEnabled);
         
         this.activeEnemies.forEach(enemy => {
             enemy.update(dt);
         });
 
-        this.objects.forEach(obj => {
+        collidableObjects.forEach(obj => {
             obj.update(dt);
         });
+
+        staticObjects.forEach(obj => {
+            obj.update(dt);
+        });
+
+        // this.objects.forEach(obj => {
+        //     obj.update(dt);
+        // });
 
         let bullets = this.player.objects.filter(obj => obj.active);
 
