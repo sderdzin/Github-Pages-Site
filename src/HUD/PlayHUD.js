@@ -12,6 +12,8 @@ export default class PlayHUD extends BaseScene {
     this.text = "SCORE:";
     this.width = this.game.width;
     this.height = this.game.height;
+    this.x = this.width - 250;
+    this.y = 50;
     console.log(this);
     this.create();
   }
@@ -30,7 +32,7 @@ export default class PlayHUD extends BaseScene {
     ctx.strokeRect(0, 0, this.width, this.height);
     ctx.fillStyle = "white";
     ctx.font = "30px Arial";
-    ctx.fillText(this.text + `${this.score}`, this.width - 250, 50);
+    ctx.fillText(this.text + `${this.score}`, this.x, this.y);
   }
 
   setText(text) {

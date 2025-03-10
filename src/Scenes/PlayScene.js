@@ -19,11 +19,12 @@ export default class PlayScene extends BaseScene {
         this.player = null;
         this.activeEnemies = null;
         this.score = 0;
-        this.autoFireEnabled = true;
+        this.autoFireEnabled = false;
 
         // this.create();
 
         this.colDet = Krazy.CollisionDetection.rectCircleIntersect;
+        this.colDetRectRect = Krazy.CollisionDetection.rectIntersect;
         // console.log(this.colDet);
     }
 
@@ -70,6 +71,18 @@ export default class PlayScene extends BaseScene {
 
         collidableObjects.forEach(obj => {
             obj.update(dt);
+
+            if (this.player === obj) {
+                return;
+            }
+            
+            if (this.colDetRectRect(obj, this.player)) {
+                // console.log("Collision detected");
+                this.hud.x = 100;
+                this.hud.y = 100;
+                this.hud.setText("Colliding with player" + obj.constructor.name + collidableObjects.length + "\n\n");
+                this.player.y = obj.y - this.player.height;
+            }
         });
 
         staticObjects.forEach(obj => {
@@ -82,20 +95,36 @@ export default class PlayScene extends BaseScene {
 
         let bullets = this.player.objects.filter(obj => obj.active);
 
-        if (bullets.length > 0) {
-            this.activeEnemies.forEach(enemy => {
+        
+        this.activeEnemies.forEach(enemy => {
+            if (bullets.length > 0) {
                 bullets.forEach(bullet => {
                     if (this.colDet(bullet, enemy)) {
-                        // bullet.active = false;
                         this.handleCollision(bullet, enemy);
-                        // console.log("Number of enemies: ", this.activeEnemies.length, this.activeEnemies);
-                        // bullet.setInactive();
-                        // this.enemy.active = false;
-                        // console.log("Collision detected");
-                    }
+                    }                  
                 });
-            });
-        };
+            };
+
+            if (enemy.y > this.game.height / 2) {
+                if (this.colDet(collidableObjects[0], enemy)) {
+                    // this.handleCollision(bullet, enemy);
+                    this.hud.x = 100;
+                    this.hud.y = 100;
+                    let text = this.hud.text;
+                    text = text + this.game.height + enemy.y;
+                    this.hud.setText(text);
+                }
+            }
+        });
+
+        // if (this.colDet(collidableObjects[0], enemy)) {
+        //     // this.handleCollision(bullet, enemy);
+        //     this.hud.x = 100;
+        //     this.hud.y = 100;
+        //     let text = this.hud.text;
+        //     text = text + enemy.constructor.name;
+        //     this.hud.setText(text);
+        // }
 
         this.hud.update(dt);
     }
