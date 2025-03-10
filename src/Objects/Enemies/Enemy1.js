@@ -190,10 +190,10 @@ export default class Enemy1 extends BaseEntityObject {
       this.y = this.game.canvas.height - this.r;
       this.vy *= this.bounce;
     }
-    if (this.y < 0) {
-      this.y = 0;
-      this.vy *= this.bounce;
-    }
+    // if (this.y < 0) {
+    //   this.y = 0;
+    //   this.vy *= this.bounce;
+    // }
     if (this.x + this.r > this.game.canvas.width) {
       this.x = this.game.canvas.width - this.r;
       this.vx *= this.bounce;

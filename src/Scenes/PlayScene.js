@@ -115,25 +115,14 @@ export default class PlayScene extends BaseScene {
       if (bullets.length > 0) {
         bullets.forEach((bullet) => {
           if (this.colDet(bullet, enemy)) {
-            this.handleCollision(bullet, enemy);
+            this.handleProjectileCollision(bullet, enemy);
           }
         });
       }
 
-      // console.log("Enemy Y: ", enemy.y, this.game.height / 2);
-
       if (enemy.y > this.game.height / 2) {
-
         if (this.colDet(platforms[0], enemy)) {
-          enemy.y = platforms[0].y - enemy.r;
-          // enemy.y = this.game.canvas.height - this.r;
-          enemy.vy *= enemy.bounce;
-          // this.handleCollision(bullet, enemy);
-          // this.hud.x = 100;
-          // this.hud.y = 100;
-          // let text = this.hud.text;
-          // text = text + this.game.height + enemy.y;
-          // this.hud.setText(text);
+          this.handleBoundaryCollision(platforms[0], enemy);
         }
       }
     });
@@ -173,14 +162,15 @@ export default class PlayScene extends BaseScene {
   initEnemies() {
     for (let i = 0; i < this.maxEnemies; i++) {
       let x = Math.random() * this.game.canvas.width;
-      let y = -10;
+      let y = Math.random() * 425 - 450;
+      console.log(y);
       let enemy = new Enemy1(this.game, x, y, 50, 50).setRadius(50);
       this.enemies.push(enemy);
       // this.objects.push(enemy);
     }
   }
 
-  handleCollision(bullet, enemy) {
+  handleProjectileCollision(bullet, enemy) {
     // console.log("Enemy Size: ", enemy.r*2);
     this.score += 10;
     this.hud.score = this.score;
@@ -192,7 +182,7 @@ export default class PlayScene extends BaseScene {
     // console.log(enemySize);
 
     if (enemySize > 10) {
-      let newR = enemySize / 2;
+      let newR = enemySize / 1.5;
 
       // console.log("New Radius: ", newR);
 
@@ -215,5 +205,17 @@ export default class PlayScene extends BaseScene {
 
     // bullet.active = false;
     // this.enemy.active = false;
+  }
+
+  handleBoundaryCollision(obj1, obj2) {
+    // console.log("Checking Boundary Collision...");
+    obj2.y = obj1.y - obj2.r;
+    // enemy.y = this.game.canvas.height - this.r;
+    obj2.vy *= obj2.bounce;
+  }
+
+  handleObj2ObjCollision(obj1, obj2) {
+    // console.log("Checking Object Collision...");
+   
   }
 }
