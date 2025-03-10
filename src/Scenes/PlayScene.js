@@ -75,6 +75,10 @@ export default class PlayScene extends BaseScene {
     let collidableObjects = this.objects.filter((obj) => obj.collisionEnabled);
     let staticObjects = this.objects.filter((obj) => !obj.collisionEnabled);
 
+    // collidableObjects = collidableObjects.concat(this.activeEnemies);
+
+    // console.log("Collidable Objects: ", collidableObjects);
+
     this.activeEnemies.forEach((enemy) => {
       enemy.update(dt);
     });
@@ -104,11 +108,8 @@ export default class PlayScene extends BaseScene {
       obj.update(dt);
     });
 
-    // this.objects.forEach(obj => {
-    //     obj.update(dt);
-    // });
-
     let bullets = this.player.objects.filter((obj) => obj.active);
+    let platforms = this.objects.filter((obj) => obj.constructor.name === "Platform");
 
     this.activeEnemies.forEach((enemy) => {
       if (bullets.length > 0) {
@@ -119,14 +120,20 @@ export default class PlayScene extends BaseScene {
         });
       }
 
+      // console.log("Enemy Y: ", enemy.y, this.game.height / 2);
+
       if (enemy.y > this.game.height / 2) {
-        if (this.colDet(collidableObjects[0], enemy)) {
+
+        if (this.colDet(platforms[0], enemy)) {
+          enemy.y = platforms[0].y - enemy.r;
+          // enemy.y = this.game.canvas.height - this.r;
+          enemy.vy *= enemy.bounce;
           // this.handleCollision(bullet, enemy);
-          this.hud.x = 100;
-          this.hud.y = 100;
-          let text = this.hud.text;
-          text = text + this.game.height + enemy.y;
-          this.hud.setText(text);
+          // this.hud.x = 100;
+          // this.hud.y = 100;
+          // let text = this.hud.text;
+          // text = text + this.game.height + enemy.y;
+          // this.hud.setText(text);
         }
       }
     });
