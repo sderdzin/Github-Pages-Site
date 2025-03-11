@@ -1,8 +1,8 @@
 // PlayHUD.js
 
-import BaseScene from "../Scenes/BaseScene.js";
+import BaseHUD from "./BaseHUD.js";
 
-export default class PlayHUD extends BaseScene {
+export default class PlayHUD extends BaseHUD {
   constructor(that, score) {
     super();
     this.game = that;
@@ -31,7 +31,7 @@ export default class PlayHUD extends BaseScene {
     ctx.strokeStyle = "red";
     ctx.strokeRect(0, 0, this.width, this.height);
     ctx.fillStyle = "white";
-    ctx.font = "30px Arial";
+    ctx.font = this.font;
     ctx.fillText(this.text + `${this.score}`, this.x, this.y);
   }
 

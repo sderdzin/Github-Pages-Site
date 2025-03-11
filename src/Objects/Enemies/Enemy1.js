@@ -21,6 +21,7 @@ export default class Enemy1 extends BaseEntityObject {
     this.mass = mass;
     this.bounce = -0.7;
     this.friction = 0.99;
+    this.color = `rgb(${Math.random() * 230 + 35}, ${Math.random() * 230 + 35}, ${Math.random() * 230 + 35}`;
 
     this.turret = {
       x: 0,
@@ -76,7 +77,7 @@ export default class Enemy1 extends BaseEntityObject {
     // console.log("New R Value:", this.r);
     ctx.beginPath();
     ctx.arc(this.x, this.y, this.r, 0, 2 * Math.PI);
-    ctx.fillStyle = "blue";
+    ctx.fillStyle = this.color;
     ctx.fill();
 
     // this.renderTurret(ctx);

@@ -41,7 +41,7 @@ export default class PlayScene extends BaseScene {
     );
     this.objects.push(floor);
 
-    this.hud = new PlayHUD(this.game, this.score);
+    this.hud = new PlayHUD(this.game, this.score).setFontSize(16).setY(15);
     // this.objects.push(this.hud);
 
     this.initEnemies();
@@ -92,14 +92,14 @@ export default class PlayScene extends BaseScene {
 
       if (this.colDetRectRect(obj, this.player)) {
         // console.log("Collision detected");
-        this.hud.x = 100;
-        this.hud.y = 100;
-        this.hud.setText(
-          "Colliding with player" +
-            obj.constructor.name +
-            collidableObjects.length +
-            "\n\n"
-        );
+        // this.hud.x = 100;
+        // this.hud.y = 100;
+        // this.hud.setText(
+        //   "Colliding with player" +
+        //     obj.constructor.name +
+        //     collidableObjects.length +
+        //     "\n\n"
+        // );
         this.player.y = obj.y - this.player.height;
       }
     });
@@ -163,8 +163,9 @@ export default class PlayScene extends BaseScene {
     for (let i = 0; i < this.maxEnemies; i++) {
       let x = Math.random() * this.game.canvas.width;
       let y = Math.random() * 425 - 450;
+      let r = Math.random() * 50 + 25;
       console.log(y);
-      let enemy = new Enemy1(this.game, x, y, 50, 50).setRadius(50);
+      let enemy = new Enemy1(this.game, x, y, 50, 50).setRadius(r);
       this.enemies.push(enemy);
       // this.objects.push(enemy);
     }

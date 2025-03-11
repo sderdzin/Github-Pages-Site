@@ -1,8 +1,8 @@
 // HUD.js
 
-import BaseScene from "../Scenes/BaseScene.js";
+import BaseHUD from "./BaseHUD.js";
 
-export default class HUD extends BaseScene {
+export default class HUD extends BaseHUD {
   constructor(that) {
     super();
     this.game = that;
@@ -22,9 +22,9 @@ export default class HUD extends BaseScene {
   }
 
   render(ctx) {
-    ctx.fillStyle = "white";
-    ctx.font = "30px Arial";
-    ctx.fillText(this.text, 10, 50);
+    ctx.fillStyle = this.color;
+    ctx.font = this.font;
+    ctx.fillText(this.text, this.x, this.y);
   }
 
   setText(text) {
