@@ -20,6 +20,7 @@ export default class Player extends BaseControllerObject {
     this.mass = mass * this.width * this.height;
     this.bounce = -0.7;
     this.friction = 0.89;
+    this.isJumping = false;
 
     this.turret = {
       x: 0,
@@ -131,8 +132,9 @@ export default class Player extends BaseControllerObject {
     if (this.keys.includes("ArrowRight") || this.keys.includes("d")) {
       this.vx = 5;
     }
-    if (this.keys.includes(" ") && this.fireAvailable) {
-      this.fire();
+    if (this.keys.includes(" ") && !this.isJumping) {
+      this.isJumping = true;
+      this.vy = -10;
     }
   }
 

@@ -92,15 +92,8 @@ export default class PlayScene extends BaseScene {
 
       if (this.colDetRectRect(obj, this.player)) {
         // console.log("Collision detected");
-        // this.hud.x = 100;
-        // this.hud.y = 100;
-        // this.hud.setText(
-        //   "Colliding with player" +
-        //     obj.constructor.name +
-        //     collidableObjects.length +
-        //     "\n\n"
-        // );
         this.player.y = obj.y - this.player.height;
+        this.player.isJumping = false;
       }
     });
 
@@ -124,17 +117,12 @@ export default class PlayScene extends BaseScene {
         if (this.colDet(platforms[0], enemy)) {
           this.handleBoundaryCollision(platforms[0], enemy);
         }
+
+        if (this.colDet(this.player, enemy)) {
+          this.handleObj2ObjCollision(this.player, enemy);
+        }
       }
     });
-
-    // if (this.colDet(collidableObjects[0], enemy)) {
-    //     // this.handleCollision(bullet, enemy);
-    //     this.hud.x = 100;
-    //     this.hud.y = 100;
-    //     let text = this.hud.text;
-    //     text = text + enemy.constructor.name;
-    //     this.hud.setText(text);
-    // }
 
     this.hud.update(dt);
   }
@@ -160,11 +148,12 @@ export default class PlayScene extends BaseScene {
   }
 
   initEnemies() {
+    this.maxEnemies = 1;
     for (let i = 0; i < this.maxEnemies; i++) {
       let x = Math.random() * this.game.canvas.width;
       let y = Math.random() * 425 - 450;
       let r = Math.random() * 50 + 25;
-      console.log(y);
+      // console.log(y);
       let enemy = new Enemy1(this.game, x, y, 50, 50).setRadius(r);
       this.enemies.push(enemy);
       // this.objects.push(enemy);
@@ -217,6 +206,61 @@ export default class PlayScene extends BaseScene {
 
   handleObj2ObjCollision(obj1, obj2) {
     // console.log("Checking Object Collision...");
+    console.log("Checking Object Collision (UP, DOWN, LEFT, RIGHT)...");
    
+    // Define boundaries for the rectangle (obj1)
+    let obj1Top = obj1.y;
+    let obj1Bottom = obj1.y + obj1.height;
+    let obj1Left = obj1.x;
+    let obj1Right = obj1.x + obj1.width;
+
+    // Define boundaries for the circle (obj2)
+    let obj2Top = obj2.y - obj2.r;
+    let obj2Bottom = obj2.y + obj2.r;
+    let obj2Left = obj2.x - obj2.r;
+    let obj2Right = obj2.x + obj2.r;
+
+    const epsilon = 0.001; // Small buffer for stability
+
+    // Determine the depth of overlap for each side
+    // let overlapTop = obj1Bottom - obj2Top;
+    // let overlapBottom = obj2Bottom - obj1Top;
+    // let overlapLeft = obj1Right - obj2Left;
+    // let overlapRight = obj2Right - obj1Left;
+
+    let overlapBottom = obj1Bottom - obj2Top;
+    let overlapTop = obj2Bottom - obj1Top;
+    let overlapRight = obj1Right - obj2Left;
+    let overlapLeft = obj2Right - obj1Left;
+
+    // Find the side with the smallest overlap
+    let minOverlap = Math.min(overlapTop, overlapBottom, overlapLeft, overlapRight);
+
+    console.log(minOverlap, ":", overlapTop, overlapBottom, overlapLeft, overlapRight);
+    // Handle the collision based on the side of smallest overlap
+    if (minOverlap === overlapTop && obj2.vy > 0) {
+        // Top collision
+        obj2.y = obj1.y - obj2.r - epsilon; // Push circle above rectangle
+        obj2.vy *= obj2.bounce; // Reverse vertical velocity
+    } 
+    else if (minOverlap === overlapBottom && obj2.vy < 0) {
+        // Bottom collision
+        obj2.y = obj1.y + obj1.height + obj2.r + epsilon; // Push circle below rectangle
+        obj2.vy *= obj2.bounce; // Reverse vertical velocity
+    } else if (minOverlap === overlapLeft && obj2.vx > 0) {
+        // Left collision
+        obj2.x = obj1.x - obj2.r - epsilon; // Push circle to the left of rectangle
+        obj2.vx *= obj2.bounce; // Reverse horizontal velocity
+    // } else if (minOverlap === overlapRight && obj2.vx < 0) {
+    } else if (minOverlap === overlapRight) {
+        // Right collision
+        console.log("Right Collision...");
+        obj2.x = obj1.x + obj1.width + obj2.r + epsilon; // Push circle to the right of rectangle
+        obj2.vx *= obj2.bounce; // Reverse horizontal velocity
+    }
+
+
+    // obj2.y = obj1.y - obj2.r;
+    // obj2.vy *= obj2.bounce;
   }
 }
